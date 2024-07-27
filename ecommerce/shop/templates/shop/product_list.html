@@ -1,0 +1,46 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+    <h1>Products</h1>
+    <form method="get">
+        <input type="text" name="q" placeholder="Search">
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        <br>
+        <li><a href="?">All Categories</a></li>
+        <br>
+        {% for category in categories %}
+            <li><a href="?category={{ category.id }}">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <table class="table mt-5 table-bordered table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>
+                    <a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a>
+                </td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
+                <td>
+                    <form action="{% url 'create_order' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="product" value="{{ product.pk }}">
+                        <button type="submit" class="btn btn-primary">Buy</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
